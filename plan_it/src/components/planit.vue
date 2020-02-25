@@ -1,11 +1,14 @@
 <template>
-<section style="max-width: 92%; margin-left : 4%">
-  <br>
-  <h1 class="title is-3 has-text-centered">플랜잇! 🦄</h1>
-  <b-feild class="has-text-right">
-      <b-switch type="is-dark" class="is-small" v-model="displayMode">다크모드</b-switch>
-  </b-feild>
-  <br><br>
+<section style="margin : 2%">
+  
+  <h1 class="title is-3 has-text-centered">
+    플랜잇! 🦄 
+    <span class="title is-7 has-text-right">ver 0.0.1</span>
+  </h1>
+
+  <p class="has-text-right" style="margin-bottom : 1%">
+      <b-switch type="is-dark" size="is-small" v-model="displayMode">다크모드🌙 </b-switch>
+  </p>
   <section class="box">
     <b-field grouped group-multiline>
       <b-field>
@@ -51,7 +54,7 @@
         @keyup.enter="createTodo(task)">
       </b-input>
       <p class="control">
-        <b-button type="is-primary" outlined @click="createTodo(task)">추가</b-button>
+        <b-button type="is-primary" outlined @click="createTask(task)">추가</b-button>
       </p>
     </b-field>
 
@@ -60,21 +63,38 @@
   
   <ul class="list-group">
     <li class="box" v-for="(todo, index) in todos" :key="index">
-    {{todo.task}}
-    <b-checkbox size="is-small" @click="done(index)" is-light></b-checkbox>
+      <div>
+        <b-tooltip label="완료했다면 체크!"
+            :delay="1000"
+            animated>
+            <b-checkbox v-model="todos[index].checked"
+              true-value="y"
+            ></b-checkbox>
+          <del class="title is-6" v-if="todos[index].checked == 'y'">{{todo.task}}</del>
+          <span v-else>{{todo.task}}</span>
+        </b-tooltip>
+      </div>
 
-    <b-button type="is-success" class="is-small" outlined  @click="deleteTodo(index)">완료</b-button>
-    <b-dropdown aria-role="list">
-        <span class="tag is-primary is-outlined"
-            slot="trigger"
-            role="button">
-            더보기
-            <b-icon icon="menu-down"></b-icon>
-        </span>
-        <b-dropdown-item aria-role="listitem">
-          <a href="#" @click="deleteTodo(index)">삭제</a>
-        </b-dropdown-item>
-    </b-dropdown>
+      <b-tooltip label="더보기를 통해 수정/삭제 하기"
+                :delay="1000"
+                position="is-right"
+                type="is-dark"
+                animated>
+        <b-dropdown aria-role="list">
+          <span class="tag is-primary is-outlined"
+              slot="trigger"
+              role="button">
+              더보기
+              <b-icon icon="menu-down"></b-icon>
+          </span>
+          <b-dropdown-item aria-role="listitem">
+            <a href="#" @click="deleteTask(index)">삭제 (할까말까?)</a>
+          </b-dropdown-item>
+          <b-dropdown-item aria-role="listitem">
+            <a href="#" @click="modifyTask(index)">수정 (할까말까?)_</a>
+          </b-dropdown-item>
+        </b-dropdown>
+      </b-tooltip>
     </li>
   </ul>
   <hr>
@@ -103,7 +123,7 @@
 <script>
 const thisMonth = new Date().getMonth()
 export default {
-  name: 'TodoPage',
+  name: 'planit',
   computed: {
     indicators() {
         return this.bars ? 'bars' : 'dots'
@@ -113,13 +133,14 @@ export default {
     return {
       todos: [
         {
-          task:'청소',
+          task:'할일을 적어 추가해보세요!',
         },
         {
-          task:'블로그 쓰기'
+          task:'왼쪽 체크상자를 클릭하면 할일 완료 ✔️',
+          checked : 'y',
         },
         {
-          task:'밥먹기'
+          task:'더보기 버튼을 통해 수정 및 추가가 가능합니다 😤',
         },
       ],
       datetime: new Date(),
@@ -171,16 +192,22 @@ export default {
     }
   },
   methods:{
-		deleteTodo(i){
-			this.todos.splice(0,1);
+		deleteTask(index){
+      console.log(index,"<- index | todos[].task->", this.todos[index].task);
+      this.todos.splice(index,1);
+      console.log(this.todos)
     },
-    done(index){
-      
+    taskDone(index){
+      console.log(index,"<- index | todos[].task->", this.todos[index].task);
+      this.todos[i].task = "<del>"+this.todos[i].task+"</del>";
     },
-		createTodo(task){
+    modifyTask(index){
+      alert("기능 준비중입니다.");
+    },
+		createTask(task){
       this.$buefy.notification.open('<span class="title is-6">'+task+'</span>을(를) 할일에 추가했습니다!')
 			if(task != null){
-				this.todos.push({task:task});
+        this.todos.push({task:task});
 				this.task = null;
 			}
 		}
