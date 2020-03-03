@@ -1,9 +1,10 @@
-<template>
-<section style="margin : 2%">
+<template class="">
+
+
+<section style="padding : 3%">
   
   <h1 class="title is-3 has-text-centered">
-    플랜잇! 🦄 
-    <span class="title is-7 has-text-right">ver 0.0.1</span>
+    플랜잇! 🦄
   </h1>
 
   <p class="has-text-right" style="margin-bottom : 1%">
@@ -59,8 +60,6 @@
     </b-field>
 
   </section>
-  
-  
   <ul class="list-group">
     <li class="box" v-for="(todo, index) in todos" :key="index">
       <div>
@@ -110,11 +109,18 @@
           >
       </b-datepicker>
   </p>
-
+ <hr>       
+<div class="has-text-centered">
+  <b-taglist attached >
+        <b-tag type="is-dark">planit</b-tag>
+        <b-tag type="is-primary">0.0.1</b-tag>
+    </b-taglist>
+</div>
 </section>
 
-  
+
 </template>
+
 <style scoped>
     .tag {
         cursor: pointer;
@@ -201,16 +207,67 @@ export default {
       console.log(index,"<- index | todos[].task->", this.todos[index].task);
       this.todos[i].task = "<del>"+this.todos[i].task+"</del>";
     },
-    modifyTask(index){
-      alert("기능 준비중입니다.");
-    },
 		createTask(task){
       this.$buefy.notification.open('<span class="title is-6">'+task+'</span>을(를) 할일에 추가했습니다!')
 			if(task != null){
         this.todos.push({task:task});
 				this.task = null;
-			}
-		}
+      }
+		},
+    modifyTask() {
+        this.$buefy.modal.open({
+            parent: this,
+            component: ModifyTaskModalForm,
+            hasModalCard: true,
+            customClass: 'custom-class custom-class-2',
+            trapFocus: true
+        })
+    }
 	}
 }
+
+const ModifyTaskModalForm = {
+    props: ['tag', 'task'],
+    template: `
+        <form action="">
+            <div class="modal-card" style="width: auto">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">할 일 수정</p>
+                </header>
+
+                <section class="modal-card-body">
+                  <b-field grouped group-multiline>
+                    <b-field label="태그">
+                        <b-input
+                            type="tag"
+                            :value="tag"
+                            placeholder="태그를 입력해주세요."
+                            required>
+                        </b-input>
+                    </b-field>
+
+                    <b-field label="할일">
+                        <b-input
+                            type="text"
+                            :value="task"
+                            placeholder="할일을 입력해주세요."
+                            required>
+                        </b-input>
+                    </b-field>
+
+                    <b-checkbox>Remember me</b-checkbox>
+                  </b-feild>
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button" type="button" @click="$parent.close()">취소</button>
+                    <button class="button is-primary">수정</button>
+                </footer>
+            </div>
+        </form>
+    `
+}
+ function myFunction() {
+      var element = document.template;
+      element.classList.toggle("dark-mode");
+  }
 </script>

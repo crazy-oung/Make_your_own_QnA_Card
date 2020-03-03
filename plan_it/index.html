@@ -6,9 +6,31 @@
     <meta name="viewport" content="width=device-width, user-scalable=no">
     <style type="text/css">
       @import url('https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,300,400,500,700,900&display=swap&subset=korean');
+      /* @media (prefers-color-scheme: dark) {
+        body {
+          background-color: #242424;
+          color: aliceblue;
+        }
+      }
+      @media (prefers-color-scheme: light) {
+        body {
+          background-color: rgb(240, 240, 240);
+          color: black;
+        }
+      }
+      body.dark {
+        background-color: rgb(30,34,39);
+        color: #fff;
+      }
+      body.dark code[class*=language-],
+      body.dark table tbody>tr:nth-child(odd)>td,
+      body.dark table tbody>tr:nth-child(odd)>th {
+        background: #282c34
+      } */
+
       .dark_mode{
         background: #242424 !important;
-        color: aliceblue;
+        color: aliceblue !important;
       }
       html{
           font-family: 'Noto Sans KR' ;
@@ -30,4 +52,12 @@
       <div id="app"></div>
     </div>
   </body>
+
+  <script>
+ document.addEventListener('DOMContentLoaded', (event) => {
+  ((localStorage.getItem('mode') || 'dark') === 'dark') ? document.querySelector('body').classList.add('dark') : document.querySelector('body').classList.remove('dark')
+})
+localStorage.setItem('mode', (localStorage.getItem('mode') || 'dark') === 'dark' ? 'light' : 'dark'); localStorage.getItem('mode') === 'dark' ? document.querySelector('body').classList.add('dark') : document.querySelector('body').classList.remove('dark')
+  </script>
+    
 </html>
